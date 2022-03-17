@@ -14,6 +14,7 @@ def generate_hilbert_matrix(n: int, digits: int = -1) -> np.array:
                     raise AttributeError("digits must be positive value")
                 current_value = round(current_value, digits)
             matrix[i, j] = current_value
+
     return matrix
 
 
@@ -114,8 +115,9 @@ def find_angular_criterion_condition_number(matrix: np.ndarray) -> float:
 
 
 def solve_linear_equation(A: np.ndarray, b: np.ndarray) -> np.ndarray:
-    inverse_A = np.linalg.inv(A)
-    return inverse_A.dot(b)
+    return np.linalg.solve(A, b)
+    # inverse_A = np.linalg.inv(A)
+    # return inverse_A.dot(b)
 
 
 def find_matrix_condition_numbers(matrix: np.array) -> list:
@@ -126,30 +128,47 @@ def find_matrix_condition_numbers(matrix: np.array) -> list:
     return condition_numbers
 
 
-def matrix_and_n(matrix):
+def matrix_and_n(matrix, cond_value=10 ** 4):
     n = matrix.shape[0]
     standard_vector = np.ones(n)
     b = matrix.dot(standard_vector)
     solution = solve_linear_equation(matrix, b)
-    print(b)
 
     discrepancies = []
     condition_numbers = find_matrix_condition_numbers(matrix)
     digits = []
     for i in range(20, 1, -1):
         varied_matrix = np.round(matrix, i)
-        varied_b = np.around(b)
+        varied_b = varied_matrix.dot(standard_vector)
+        # varied_b = np.around(b)
         varied_solution = solve_linear_equation(varied_matrix, varied_b)
         discrepancies.append(np.linalg.norm(solution - varied_solution))
         digits.append(i)
+        if i == 20:
+            # print(varied_matrix)
+            print(solution)
+            print(varied_solution)
+            print()
+            print(f"20 -> {np.linalg.norm(solution - varied_solution)}")
+        elif i == 2:
+            print(solution)
+            print(varied_solution)
+            print()
+            print(f"2 -> {np.linalg.norm(solution - varied_solution)}")
 
-    plt.title("Discrepancy to digits dependency")
-    plt.plot(digits, discrepancies)
-    plt.xlabel("Digits")
-    plt.ylabel("Discrepancy")
-    plt.show()
+    # plt.title("Discrepancy to digits dependency")
+    # plt.plot(digits, discrepancies)
+    # plt.xlabel("Digits")
+    # plt.ylabel("Discrepancy")
+    # plt.show()
 
     print(f"n: {n}")
     print(f"Condidion numbers")
     for name, value in condition_numbers:
-        print(f"{name} -> {value}, {value > 10 ** 4} that it is > 10^4")
+        print(f"{name} -> {value}, {value > cond_value} that it is > {cond_value}")
+
+
+if __name__ == "__main__":
+    n = 9
+    matrix = generate_hilbert_matrix(n)
+    matrix_and_n(matrix)
