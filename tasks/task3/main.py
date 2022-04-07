@@ -24,7 +24,7 @@ def get_sin_cos(a, b):
     if a == 0 and b == 0:
         return 0, 1
     r = math.sqrt(a ** 2 + b ** 2)
-    return -(b / r), a / r
+    return b / r, -(a / r)
 
 
 def qr_decompose(A: np.array):
@@ -37,8 +37,8 @@ def qr_decompose(A: np.array):
             a, b = R[i - 1, j], R[i, j]
             sin, cos = get_sin_cos(a, b)
             rotational_matrix = create_rotational_matrix(n, sin, cos, i, j)
-            R = rotational_matrix.T.dot(R)
-            Q = Q.dot(rotational_matrix)
+            R = rotational_matrix.T @ R
+            Q = Q @ rotational_matrix
     return Q, R
 
 # to solve QRx = b
