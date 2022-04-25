@@ -1,0 +1,19 @@
+from scipy.integrate import odeint
+
+
+def function(y, x):
+    return (y[1], 1 / (2 + x) * y[1] + (2 + x) * np.cos(x) * y[0] + (1 + x) * (2 + x))
+
+
+y_0 = [1, 0.5]
+from_point = -1
+to_point = 1
+x_range = np.linspace(from_point, to_point)
+solution = odeint(function, y_0, x_range)[:, 0]
+
+data = []
+for x, y in zip(x_range, solution):
+    data.append([x, y, 1])
+
+df = pd.DataFrame(data, columns=[x_label, y_label, color_label])
+plot_solution_with_color(df)

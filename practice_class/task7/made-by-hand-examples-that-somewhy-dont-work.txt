@@ -1,0 +1,23 @@
+# u must be x ^ 2, but it does not work
+solve_sec_ord_diff_eq_with_net(
+    lambda x: 1,
+    lambda x: 1,
+    lambda x: 1,
+    lambda x: x ** 2 + 2 * x + 2,
+    -2,
+    4,
+    2,
+    4,
+)
+
+# u must be x ^ 3, but it does not work
+solve_sec_ord_diff_eq_with_net(
+    lambda x: 1,
+    lambda x: 1,
+    lambda x: 1,
+    lambda x: x ** 3 + 3 * x ** 2 + 6 * x,
+    -3,
+    -27,
+    3,
+    27,
+)
